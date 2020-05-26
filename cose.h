@@ -3,6 +3,11 @@
 
 #pragma execution_character_set( "UTF-8" )
 
+
+#define ROWNUM 12
+#define COLNUM 12
+#define CELL_SIZE 4	//number of byte for ship piece char, 4 is max UTF-8 size, maybe more in future for ansi colors
+
 typedef enum {e, s, o, n} direction_t;
 typedef enum {A=1, B, C, D, E, F, G, H, I, L, M, N} coordinate_t;
 typedef enum {nave_5=5, nave_3=3, nave_2=2, nave_1=1} length_t;	//con le lettere fa schifo ma serve identifier
@@ -66,12 +71,6 @@ const char *grid[] = {
 "└───┴───┴───┴───┴───┴───┴───┴───┴───┴───┴───┴───┘\n"
 };
 */
-
-const char *cellsContent = "│ %s │ %s │ %s │ %s │ %s │ %s │ %s │ %s │ %s │ %s │ %s │ %s │";
-const char *topRow     = "┌───┬───┬───┬───┬───┬───┬───┬───┬───┬───┬───┬───┐";
-const char *emptyCells = "│   │   │   │   │   │   │   │   │   │   │   │   │";
-const char *middleRow  = "├───┼───┼───┼───┼───┼───┼───┼───┼───┼───┼───┼───┤";
-const char *bottomRow  = "└───┴───┴───┴───┴───┴───┴───┴───┴───┴───┴───┴───┘";
 
 /*
 ║⇐⇑⇓⇔⇕⇳⫿▯⌷═⇒⬍⬌⬇❙❚⬆⬅➡❚➖
@@ -149,24 +148,32 @@ void renderShip(barca_t *barca){
 #include <stdio.h>
 #include <stdlib.h>
 
-void printShips(barca_t (*barche)[10], int n){
-	int r, b, i;
-	printf("\n%s\n",topRow);
+void printShips(barca_t (*barche)[10], int nb){
+	int r, c, i, b;
 	
-	/*
-	length_t fatti[n];
-	memset(fatti, 0, n);
-	*/
+	for (c=0;c<=COLNUM;c++){
+		//start row
+		switch(c){
+			case 0:
+				printf("\n┌───");
+				break;
+			case COLNUM:
+				printf("┐\n");
+				break;
+			default:
+				printf("┬───");
+		}
+	}
 	
-	char celle[12][12][4];
-	memset(**celle, 0, 12*12*4);
+	char celle[ROWNUM][COLNUM][4];
+	memset(**celle, 0, ROWNUM*COLNUM*4);
 	
-	for (b=0;b<n;b++){
+	for (b=0;b<nb;b++){
 		for (i=0; i<(*barche)[b].length; i++){
 			int x = (*barche)[b].x;
 			int y = (*barche)[b].y;
 			
-			switch (*barche)[b].direction){
+			switch ((*barche)[b].direction){
 				case e:
 					x+=i;
 					break;
@@ -187,55 +194,41 @@ void printShips(barca_t (*barche)[10], int n){
 		}
 	}
 	
-	
-	
-	for (r=0;r<12;r++){
-		char pezziInRiga[12][4];
-		memset(*pezziInRiga, 0, 12*4);
-		
-		/*
-		//NOTE inefficiente
-		
-		for (b=0;b<n;b++){
-			if (fatti[b] == (*barche)[b].length ){
-// 				printf("%d %d", fatti[b], (*barche)[b].length);
-				break;
-			}
-			
-			if ( (*barche)[b].direction == e || (*barche)[b].direction == o ){
-				//se orizzontale
-				if ( (*barche)[b].y == r )
-					//e sulla riga corrente
-					for (i=0;i<(*barche)[b].length;i++){
-						//copia ogni pezzo nella cella giusta in pezzi in riga
-						strcpy(pezziInRiga[(*barche)[b].x + ( (*barche)[b].direction == e ? i : -i)], (*barche)[b].renderedShip[i]);
-						fatti[b]++;
-					}
-			}
-			else{
-				int delta = (*barche)[b].y - r;
-				if ( abs(delta) <= (*barche)[b].length ){
-					//potrebbe, a seconda della direzione, avere un pezzo in row
-					
-					if (delta == 0 || ( (*barche)[b].direction == s && delta > 0 ) || ( (*barche)[b].direction == n && delta < 0) ){
-						strcpy(pezziInRiga[(*barche)[b].x],  (*barche)[b].renderedShip[abs(delta)]);
-						fatti[b]++;
-					}
-				}
-			}
-			
-		}
-		*/
-		
-		for (i=0;i<12;i++){
+	for (r=0;r<ROWNUM;r++){
+		for (c=0;c<COLNUM;c++){
 			printf("│ ");
-			printf("%s ", pezziInRiga[i][0] ? pezziInRiga[i] : " " );
+			printf("%s ", celle[r][c][0] ? celle[r][c] : " " );
 			
 		}
 		printf("│\n");
 		
-		if (r < 11)
-			printf("%s\n", middleRow);
+		if (r+1 < ROWNUM){
+			//middle row
+			for (c=0;c<=COLNUM;c++)
+				switch(c){
+					case 0:
+						printf("├───");
+						break;
+					case COLNUM:
+						printf("┤\n");
+						break;
+					default:
+						printf("┼───");
+				}
+		}
 	}
-	printf("%s\n",bottomRow);
+	
+	for (c=0;c<=COLNUM;c++){
+		//end row
+		switch(c){
+			case 0:
+				printf("└───");
+				break;
+			case COLNUM:
+				printf("┘\n");
+				break;
+			default:
+				printf("┴───");
+		}
+	}
 }
