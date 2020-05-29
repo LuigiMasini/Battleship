@@ -182,28 +182,37 @@ void ship2grid (barca_t (*barche)[10], int nb, char (*celle)[ROWNUM][COLNUM][CEL
 			switch ((*barche)[b].direction){
 				case e:
 					x+=i;
-					if (x>COLNUM-1)
+					if (x>COLNUM-1){
 						x-=COLNUM;
+						currentInvalid=true;
+					}
 					break;
 				case o:
 					x-=i;
-					if (x<0)
+					if (x<0){
 						x+=COLNUM;
+						currentInvalid=true;
+					}
 					break;
 				case n:
 					y-=i;
-					if (y<0)
+					if (y<0){
 						y+=ROWNUM;
+						currentInvalid=true;
+					}
 					break;
 				case s:
 					y+=i;
-					if(y>ROWNUM-1)
+					if(y>ROWNUM-1){
 						y-=ROWNUM;
+						currentInvalid=true;
+					}
 					break;
 				default:
 					fprintf(stderr, "!!Error: invalid rotation for %d° ship", b);
 			}
 			
+			//controlla se le celle intorno sono occupate
 			if (	(occupato[y][x-1]		&& occupatoNum[y][x-1]	!= b) || \
 				(occupato[y][x]		&& occupatoNum[y][x]	!= b) || \
 				(occupato[y][x+1]		&& occupatoNum[y][x+1]	!= b) || \
@@ -227,14 +236,17 @@ void ship2grid (barca_t (*barche)[10], int nb, char (*celle)[ROWNUM][COLNUM][CEL
 	}
 }
 
-void printShips(barca_t (*barche)[10], int nb){
+void printShips(barca_t (*barche)[10], int nb, int left){
 	int r, c;
+	
+	for (c=0;c<left;c++)
+		printf(" ");
 	
 	for (c=0;c<=COLNUM;c++){
 		//start row
 		switch(c){
 			case 0:
-				printf("\n┌───");
+				printf("┌───");
 				break;
 			case COLNUM:
 				printf("┐\n");
@@ -250,6 +262,9 @@ void printShips(barca_t (*barche)[10], int nb){
 	ship2grid(barche, nb, &celle, &invalid);
 	
 	for (r=0;r<ROWNUM;r++){
+		for (c=0;c<left;c++)
+			printf(" ");
+		
 		for (c=0;c<COLNUM;c++){
 			printf("│ ");
 			
@@ -270,6 +285,10 @@ void printShips(barca_t (*barche)[10], int nb){
 		
 		if (r+1 < ROWNUM){
 			//middle row
+			
+			for (c=0;c<left;c++)
+				printf(" ");
+
 			for (c=0;c<=COLNUM;c++)
 				switch(c){
 					case 0:
@@ -283,6 +302,9 @@ void printShips(barca_t (*barche)[10], int nb){
 				}
 		}
 	}
+	
+	for (c=0;c<left;c++)
+		printf(" ");
 	
 	for (c=0;c<=COLNUM;c++){
 		//end row

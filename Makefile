@@ -36,7 +36,3 @@ LINUX:
 
 OSX:
 	$(CC) $(FLAGS) $(DIR)main.c -o battaglia_navale
-
-run:
-	$(all)
-	./battaglia_navale
