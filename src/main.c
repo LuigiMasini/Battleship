@@ -2,11 +2,6 @@
 #include <cose.h>
 #include <stdio.h>
 
-#define NUM_BARCHE 10
-// #define ROWNUM 12
-// #define COLNUM 12
-// #define CELL_SIZE 4
-
 barca_t barche[NUM_BARCHE];
 
 extern const char *grid[];

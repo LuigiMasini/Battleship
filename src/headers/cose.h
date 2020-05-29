@@ -4,6 +4,7 @@
 #define ROWNUM 12
 #define COLNUM 12
 #define CELL_SIZE 4	//number of byte for ship piece char, 4 is max UTF-8 size, maybe more in future for ansi colors
+#define NUM_BARCHE 10
 
 typedef enum {e, s, o, n} direction_t;
 typedef enum {A=1, B, C, D, E, F, G, H, I, L, M, N} coordinate_t;
@@ -25,11 +26,13 @@ typedef struct {
 	bool isPosValid;
 } barca_t;
 
-void setupBarche(barca_t (*barche)[10], int n){
+void setupBarche(barca_t (*barche)[NUM_BARCHE], int n){
 	int i;
 	for (i=0; i<n; i++){
+		(*barche)[i].y=0;
+		(*barche)[i].x=0;
 		memset((*barche)[i].pezzi_colpiti, false, sizeof(bool)*5);
-		memset((*barche)[i].renderedShip, '\0', 20);
+		memset((*barche)[i].renderedShip, '\0', 5*CELL_SIZE);
 		(*barche)[i].isPosValid = true;
 	}
 }
@@ -110,7 +113,7 @@ void setUp(){
 
 void renderShip(barca_t *barca){
 	int i;
-	char ship[barca->length][4], *ch;
+	char ship[barca->length][CELL_SIZE], *ch;
 	memset(*ship, 0, sizeof(ship));
 	
 	switch(barca->length){
@@ -157,7 +160,7 @@ void renderShip(barca_t *barca){
 #include <stdio.h>
 #include <stdlib.h>
 
-void ship2grid (barca_t (*barche)[10], int nb, char (*celle)[ROWNUM][COLNUM][CELL_SIZE], bool (*invalid)[ROWNUM][COLNUM]) {
+void ship2grid (barca_t (*barche)[NUM_BARCHE], int nb, char (*celle)[ROWNUM][COLNUM][CELL_SIZE], bool (*invalid)[ROWNUM][COLNUM]) {
 	int b, i;
 	
 	bool occupato[ROWNUM][COLNUM];
@@ -212,16 +215,18 @@ void ship2grid (barca_t (*barche)[10], int nb, char (*celle)[ROWNUM][COLNUM][CEL
 					fprintf(stderr, "!!Error: invalid rotation for %d° ship", b);
 			}
 			
-			//controlla se le celle intorno sono occupate
-			if (	(occupato[y][x-1]		&& occupatoNum[y][x-1]	!= b) || \
-				(occupato[y][x]		&& occupatoNum[y][x]	!= b) || \
-				(occupato[y][x+1]		&& occupatoNum[y][x+1]	!= b) || \
-				(occupato[y-1][x-1]	&& occupatoNum[y-1][x-1]!= b) || \
-				(occupato[y-1][x]		&& occupatoNum[y-1][x]	!= b) || \
-				(occupato[y-1][x+1]	&& occupatoNum[y-1][x+1]!= b) || \
-				(occupato[y+1][x-1]	&& occupatoNum[y+1][x-1]!= b) || \
-				(occupato[y+1][x]		&& occupatoNum[y+1][x]	!= b) || \
-				(occupato[y+1][x+1]	&& occupatoNum[y+1][x+1]!= b) ){
+			//controlla se le celle intorno sono occupate, esclidendo quelle al bordo
+			//NOTE si può fare più elegante con macro
+			if (\
+				(						   occupato[y][x]		&& occupatoNum[y][x]	!= b) || \
+				(x-1>=0					&& occupato[y][x-1]	&& occupatoNum[y][x-1]	!= b) || \
+				(x+1<=COLNUM-1				&& occupato[y][x+1]	&& occupatoNum[y][x+1]	!= b) || \
+				(y-1>=0 && x-1>=0				&& occupato[y-1][x-1]	&& occupatoNum[y-1][x-1]!= b) || \
+				(y-1>=0 					&& occupato[y-1][x]	&& occupatoNum[y-1][x]	!= b) || \
+				(y-1>=0 && x+1<=COLNUM-1		&& occupato[y-1][x+1]	&& occupatoNum[y-1][x+1]!= b) || \
+				(y+1<=ROWNUM-1 && x-1>=0		&& occupato[y+1][x-1]	&& occupatoNum[y+1][x-1]!= b) || \
+				(y+1<=ROWNUM-1				&& occupato[y+1][x]	&& occupatoNum[y+1][x]	!= b) || \
+				(y+1<=ROWNUM-1 && x+1<=COLNUM-1	&& occupato[y+1][x+1]	&& occupatoNum[y+1][x+1]!= b) ){
 				
 // 				printf("invalid");
 				(*invalid)[y][x]=true;
@@ -236,7 +241,7 @@ void ship2grid (barca_t (*barche)[10], int nb, char (*celle)[ROWNUM][COLNUM][CEL
 	}
 }
 
-void printShips(barca_t (*barche)[10], int nb, int left){
+void printShips(barca_t (*barche)[NUM_BARCHE], int nb, int left){
 	int r, c;
 	
 	for (c=0;c<left;c++)
