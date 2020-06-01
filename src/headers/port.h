@@ -46,9 +46,10 @@ char getche(void)
 }
 #ifdef WINDOWS
 	#include <windows.h>
-#endif
-#ifndef WINDOWS
+#else
 	#include <string.h>
+	#include <unistd.h>
+	#include <sys/ioctl.h>
 #endif
 
 #include <stdbool.h>
@@ -78,7 +79,7 @@ int code2code(int cod, bool isBack){
 			code = 105;
 			break;
 		case 0x06:
-			code = 103;
+			code = 43;
 			break;
 		case 0x07:
 			code = 107;
@@ -102,7 +103,7 @@ int code2code(int cod, bool isBack){
 			code = 45;
 			break;
 		case 0x0e:
-			code = 43;
+			code = 103;
 			break;
 		case 0x0f:
 			code = 47;
@@ -117,19 +118,30 @@ int code2code(int cod, bool isBack){
 	return code;
 }
 
+#include <stdlib.h>
+
 void toColor(int winColorCode){
 	
 	#ifndef WINDOWS
-	char ansiColor[10] = "\e[";
+	char hexcolor[2], ansiColor[10] = "\e[";
 	
-	int sfondo = (winColorCode -1)/ 0x0F;
-	int colore = winColorCode % 0x10;
+	sprintf(hexcolor,"%2x", winColorCode);
+// 	printf("%s", hexcolor);
+	
+	int colore=strtol(&hexcolor[1], NULL, 16);
+	hexcolor[1]='\0';
+	int sfondo=strtol(&hexcolor[0], NULL, 16);
+	
+// 	char sfondo = (winColorCode -1)/ 0x0F;
+// 	char colore = winColorCode % 0x10;
 	
 	
+	//incorretto ma comodo
 	if (colore>=0x08)
 		strcat(ansiColor+2, "1;");	//bold
 	else
 		strcat(ansiColor+2, "0;");	//bold
+	
 	
 	sfondo = code2code(sfondo, true);
 	colore = code2code(colore, false);
@@ -153,3 +165,67 @@ void toColor(int winColorCode){
 	#endif
 	
 }
+/*ANSI color codes
+ *   FG BG
+ *  30 40  = Black
+ *  31 41  = Red
+ *  32 42  = Green
+ *  33 43  = Yellow
+ *  34 44  = Blue
+ *  35 45  = Magenta
+ *  36 46  = Cyan
+ *  37 47  = White
+ *  90 100 = Bright Black
+ *  91 101 = Bright Red
+ *  92 102 = Bright Green
+ *  93 103 = Bright Yellow
+ *  94 104 = Bright Blue
+ *  95 105 = Bright Magenta
+ *  96 106 = Bright Cyan
+ *  97 107 = Bright White
+ */
+/*windows prompt colors (bg, fg)
+ *  0 = Black
+ *  1 = Blue
+ *  2 = Green
+ *  3 = Aqua
+ *  4 = Red
+ *  5 = Purple
+ *  6 = Yellow
+ *  7 = White
+ *  8 = Gray
+ *  9 = Light Blue
+ *  A = Light Green
+ *  B = Light Aqua
+ *  C = Light Red
+ *  D = Light Purple
+ *  E = Light Yellow
+ *  F = Bright White
+ */
+
+void getTerminalSize(int *cols, int *rows){
+	#ifdef WINDOWS
+	
+	CONSOLE_SCREEN_BUFFER_INFO csbi;
+	
+	GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &csbi);
+	*cols = csbi.srWindow.Right - csbi.srWindow.Left + 1;
+	*rows = csbi.srWindow.Bottom - csbi.srWindow.Top + 1;
+	
+	#else
+	
+	struct winsize w;
+	ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
+	
+	*cols = w.ws_col;
+	*rows = w.ws_row;
+	#endif
+}
+
+#include <stdlib.h>
+
+#ifdef WINDOWS
+#define CLEAR system("cls")
+#else
+#define CLEAR system("clear");
+#endif

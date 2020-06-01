@@ -1,6 +1,6 @@
 
 DIR=src/
-FLAGS= -I $(DIR)headers/ -std=c99 -Wall -finput-charset=UTF-8
+FLAGS= -I $(DIR)headers/ -std=c99 -Wall -Werror -finput-charset=UTF-8
 
 
 ifeq ($(OS),Windows_NT)
