@@ -42,6 +42,9 @@ CONFIGURAZIONE MINIMA
 
 Va bene qualsiasi sistema operativo basta che abbia all'interno di se il cmd, comunemente chiamato prompt dei comandi.
 
+per compilare è sufficiente make allinterno della cartella
+NOTA:  non è ancora stato provato in ambiente windows, segnalare eventuali bug
+
 _____________________________
 
 2) PATCH
