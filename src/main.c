@@ -427,7 +427,7 @@ int main(){
 
 int printMenu(bool isMiddle){
 	
-	int InputMenu;
+	int InputMenu, i=0;
 	int selezione=0;
 	
 	int rows, cols;
@@ -437,8 +437,8 @@ int printMenu(bool isMiddle){
 	{
 		
 		CLEAR;
-		
-		for (int i=0;i<(rows - 10)/2;i++)
+		 
+		for (i=10;i<(rows - 10)/2;i++)
 			printf("\n");
 		
 		toColor(7);

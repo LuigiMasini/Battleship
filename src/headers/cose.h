@@ -95,8 +95,8 @@ const char *grid[] = {
 
 */
 
-char*  centralEmptyBlock = "⬜";
-char*  centralFullBlock  = "⬛";
+char*  centralEmptyBlock = "◻︎";		//"⬜";
+char*  centralFullBlock  = "◼︎";		//"⬛";
 char*  topEmptyArrow     = "△";
 char*  topFullArrow      = "▲";
 char*  rightEmptyArrow   = "▷";
@@ -121,6 +121,9 @@ const char*  hitIcon           = "❌";
 #include<time.h>
 
 void setUp(){
+	
+	toColor(7);
+	
 	#ifdef WINDOWS
 	
 	PlaySound("a.mp3",NULL,SND_ASYNC | SND_LOOP);
@@ -368,7 +371,7 @@ int centerText(char *s){
 	for (i=0; i<(cols - strlen(s))/2; i++)
 		printf(" ");
 	
-	return printf(s);
+	return printf("%s",s);
 }
 
 //https://gsamaras.wordpress.com/code/random-numbers-%E2%88%88min-max/
@@ -619,7 +622,7 @@ void printCampo(barca_t (*myships)[NUM_BARCHE], barca_t (*hisships)[NUM_BARCHE],
 					//cella è acqua colpita
 					
 					toColor(19);
-					printf(waterIcon);
+					printf("%s",waterIcon);
 				}
 			}
 			else
@@ -660,7 +663,7 @@ void printCampo(barca_t (*myships)[NUM_BARCHE], barca_t (*hisships)[NUM_BARCHE],
 					
 					toColor(0x0c);	//red
 					if (nonAffondata)
-						printf(hitIcon);
+						printf("%s",hitIcon);
 					else
 						printf("%s", hiscelle[r][c]);
 				}
@@ -668,7 +671,7 @@ void printCampo(barca_t (*myships)[NUM_BARCHE], barca_t (*hisships)[NUM_BARCHE],
 					//cella è acqua colpita
 					
 					toColor(147);//19
-					printf(waterIcon);
+					printf("%s",waterIcon);
 				}
 			}
 			else

@@ -122,12 +122,12 @@ int code2code(int cod, bool isBack){
 
 void toColor(int winColorCode){
 	
+
 	#ifndef WINDOWS
-	char hexcolor[2], ansiColor[10] = "\e[";
+	char hexcolor[3], ansiColor[11] = "\e[";
 	
-	sprintf(hexcolor,"%2x", winColorCode);
-// 	printf("%s", hexcolor);
-	
+	sprintf(hexcolor,"%02x", winColorCode);
+
 	int colore=strtol(&hexcolor[1], NULL, 16);
 	hexcolor[1]='\0';
 	int sfondo=strtol(&hexcolor[0], NULL, 16);
