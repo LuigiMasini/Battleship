@@ -105,7 +105,7 @@ char*  bottomEmptyArrow  = "▽";
 char*  bottomFullArrow   = "▼";
 char*  leftEmptyArrow    = "◁";
 char*  leftFullArrow     = "◀";
-const char*  waterIcon         = "▒";
+const char*  waterIcon         = "▒";	//"🌊";
 const char*  hitIcon           = "❌";
 
 #ifdef WINDOWS
