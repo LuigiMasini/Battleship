@@ -43,12 +43,16 @@ int main(){
 			
 			CLEAR;
 			
-			for (i=0; i<top-4; i++)
+			for (i=0; i<top-2; i++)
 				printf("\n");
 			
 			for (b=0;b<nBarcheOk;b++)
 				for (i=0;i<myShips[b].length;i++)
 					myShips[b].pezzi_vivi[i] = b == currentBarca ? true : false;
+			
+			centerText("Posiziona le tue barche");
+			
+			printf("\n");
 			
 			printShips(&myShips, nBarcheOk, left);
 			
@@ -103,7 +107,7 @@ int main(){
 			#endif
 			
 			toColor( 0x07 );
-			printf("\tper inserire la prossima nave\n");
+			printf("\tper confermare e inserire la prossima nave\n");
 			
 			toColor(0x07);
 			
@@ -347,9 +351,16 @@ int main(){
 						if (!foundPezzoVivo)
 							vince=1;
 						else{
-							
-							hisShots[nHisShots].x=randomRange(0, ROWNUM-1);
-							hisShots[nHisShots].y=randomRange(0, COLNUM-1);
+							do{
+								hisShots[nHisShots].x=randomRange(0, ROWNUM-1);
+								hisShots[nHisShots].y=randomRange(0, COLNUM-1);
+								
+								//check if alredy hitted that cell
+								for (i=0;i<nHisShots;i++)
+									if(hisShots[nHisShots].x == hisShots[i].x && hisShots[nHisShots].y == hisShots[i].y )
+										break;
+							}
+							while(i!=nHisShots);
 							nHisShots++;
 							
 							memset(*colpite, false, ROWNUM*COLNUM*sizeof(bool));
