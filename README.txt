@@ -71,4 +71,4 @@ ___________________________________
 ___________________________________
 
 In caso di problemi di natura tecnica, vai su www.lefragoline/support per le ultime informazioni di supporto e le risposte alle domande più frequenti. 
-Offriamo supporto via email, telefono e Twitter, instagram e facebook.
+Offriamo supporto via email, telefono e Twitter, instagram e facebook 24/7 (chiedete di Vastarella).

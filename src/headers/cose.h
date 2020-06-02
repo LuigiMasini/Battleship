@@ -4,7 +4,7 @@
 #define ROWNUM 12
 #define COLNUM 12
 #define CELL_SIZE 4	//number of byte for ship piece char, 4 is max UTF-8 size, maybe more in future for ansi colors
-#define NUM_BARCHE 1
+#define NUM_BARCHE 10
 
 typedef enum {e, s, o, n} direction_t;
 typedef enum {A=1, B, C, D, E, F, G, H, I, L, M, N} coordinate_t;
