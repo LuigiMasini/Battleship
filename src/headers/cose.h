@@ -3,7 +3,7 @@
 
 #define ROWNUM 12
 #define COLNUM 12
-#define CELL_SIZE 4	//number of byte for ship piece char, 4 is max UTF-8 size, maybe more in future for ansi colors
+#define CELL_SIZE 5	//number of byte for ship piece char, 4 is max UTF-8 size + 1 x null terminator
 #define NUM_BARCHE 10
 
 typedef enum {e, s, o, n} direction_t;
@@ -19,7 +19,7 @@ typedef struct {
 	//inutile, basta vedere se tutti i primi length pezzi colpiti sono true
 // 	bool affondata=false;
 	
-	char renderedShip[5][4]; //4 byte UTF-8 * 5 ship pieces
+	char renderedShip[5][CELL_SIZE]; //UTF-8 char * 5 ship pieces
 	
 	bool pezzi_vivi[5];
 	
@@ -95,8 +95,8 @@ const char *grid[] = {
 
 */
 
-char*  centralEmptyBlock = "◻︎";		//"⬜";
-char*  centralFullBlock  = "◼︎";		//"⬛";
+char*  centralEmptyBlock = "◻";		//"⬜";
+char*  centralFullBlock  = "◼";		//"⬛";
 char*  topEmptyArrow     = "△";
 char*  topFullArrow      = "▲";
 char*  rightEmptyArrow   = "▷";
