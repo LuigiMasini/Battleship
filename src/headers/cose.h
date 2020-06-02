@@ -3,7 +3,7 @@
 
 #define ROWNUM 12
 #define COLNUM 12
-#define CELL_SIZE 5	//number of byte for ship piece char, 4 is max UTF-8 size + 1 x null terminator
+#define CELL_SIZE 4	//number of byte for ship piece char, 4 is max UTF-8 size + 1 x null terminator
 #define NUM_BARCHE 10
 
 typedef enum {e, s, o, n} direction_t;

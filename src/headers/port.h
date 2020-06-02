@@ -124,9 +124,10 @@ void toColor(int winColorCode){
 	
 
 	#ifndef WINDOWS
-	char hexcolor[3], ansiColor[11] = "\e[";
+	char hexcolor[3], ansiColor[13] = "\e[";
 	
 	sprintf(hexcolor,"%02x", winColorCode);
+
 
 	int colore=strtol(&hexcolor[1], NULL, 16);
 	hexcolor[1]='\0';
