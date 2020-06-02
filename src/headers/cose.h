@@ -90,7 +90,7 @@ const char *grid[] = {
 
 ║⇐⇑⇓⇔⇕⇳⫿▯⌷═⇒⬍⬌⬇❙❚⬆⬅➡❚➖
 
-✗✘✖❌✕❎‖
+✗✘✖❌✕❎‖🌊╳
 ░ ▒ ▓
 
 */
@@ -106,7 +106,7 @@ char*  bottomFullArrow   = "▼";
 char*  leftEmptyArrow    = "◁";
 char*  leftFullArrow     = "◀";
 const char*  waterIcon         = "▒";	//"🌊";
-const char*  hitIcon           = "❌";
+const char*  hitIcon           = "╳";	//"❌";
 
 #ifdef WINDOWS
 	#include <cstdio>
